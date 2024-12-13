@@ -13,7 +13,7 @@ const projectSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
-    imahe: {
+    image: {
         type: String,
         required: true,
     },

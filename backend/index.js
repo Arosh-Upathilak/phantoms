@@ -114,6 +114,81 @@ app.post("/login",async (req,res)=>{
 })
 
 
+
+app.get("/get-user",authenticateToken,async (req,res)=>{
+    const {user} =req.user;
+    const isUser =await User.findOne({_id:user._id});
+    if(!isUser){
+        return res.sendStatus(401);
+    }
+    return res.json({
+        user:{fullName: isUser.fullName, email: isUser.email, "_id": isUser._id,createdOn: isUser.createdOn},
+        message:"",
+    });
+})
+
+const Product = require("./models/project");
+
+app.post("/newproduct", async (req, res) => {
+  const { Title, Description, price, image, uniReg, university } = req.body;
+
+  // Validate required fields
+  if (!Title) {
+    return res.status(400).json({ error: "Title is required" });
+  }
+  if (!Description) {
+    return res.status(400).json({ error: "Description is required" });
+  }
+  if (!price) {
+    return res.status(400).json({ error: "Price is required" });
+  }
+  if (!image) {
+    return res.status(400).json({ error: "Image is required" });
+  }
+
+  // Check if a product with the same university registration number already exists
+  const existingProduct = await Product.findOne({ uniReg });
+  if (existingProduct) {
+    return res.status(400).json({
+      error: "Product already exists",
+    });
+  }
+
+  // Create the new product
+  const newProduct = new Product({
+    Title,
+    Description,
+    price,
+    image,
+    uniReg,
+    university,
+  });
+
+  try {
+    // Save the product to the database
+    await newProduct.save();
+
+    return res.json({
+      error: false,
+      product: newProduct,
+      message: "Product created successfully",
+    });
+  } catch (err) {
+    return res.status(500).json({
+      error: true,
+      message: "An error occurred while saving the product. Please try again.",
+    });
+  }
+});
+
+
+
+
+
+
+
+
+
 app.listen(8000);
 
 module.exports =app;

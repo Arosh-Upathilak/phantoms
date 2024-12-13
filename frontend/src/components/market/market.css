@@ -1,0 +1,130 @@
+/* marketplace.css */
+
+/* General styles */
+.marketplace-container {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+h1 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+h2 {
+  font-size: 1.5rem;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.projects-list {
+  display: flex;          /* Use flexbox */
+  flex-direction: row;    /* Align the items in a row */
+  gap: 20px;              /* Space between the project boxes */
+  overflow-x: auto;       /* Allow horizontal scrolling if there are too many items */
+  padding: 10px 0;        /* Padding for the list */
+  justify-content: start; /* Align items at the start of the container */
+}
+
+.project-card {
+  width: 250px;                    /* Set width of each project card */
+  background-color: #fff;          /* White background for each card */
+  border: 1px solid #ddd;          /* Light border around the card */
+  border-radius: 8px;              /* Rounded corners for the card */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Add subtle shadow */
+  overflow: hidden;                /* Hide overflow to keep rounded corners clean */
+  text-align: center;              /* Center text inside the card */
+  padding: 15px;                   /* Padding inside the card */
+  transition: transform 0.3s ease-in-out; /* Smooth scale effect on hover */
+  flex-shrink: 0;                  /* Prevent shrinking of the card */
+}
+
+.project-card img {
+  width: 100%;                      /* Make the image take full width of the card */
+  height: 150px;                    /* Set a fixed height for images */
+  object-fit: cover;                /* Ensure the image covers the area without distortion */
+  border-radius: 5px;               /* Rounded corners for the image */
+}
+
+.project-card h3 {
+  font-size: 1.2rem;
+  margin: 10px 0;
+}
+
+.project-card p {
+  font-size: 1rem;
+  color: #555;
+}
+
+.project-card button {
+  background-color: #007bff; /* Blue background for the button */
+  color: #fff;               /* White text */
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.project-card button:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}
+
+/* Cart section */
+.cart-icon-container {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  border-radius: 50%;
+  padding: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
+
+.cart-icon {
+  font-size: 24px;
+  color: #007bff;
+}
+
+.cart-count {
+  font-size: 14px;
+  background-color: #ff5722;
+  color: white;
+  border-radius: 50%;
+  padding: 5px 10px;
+  margin-left: 10px;
+}
+
+/* Floating Plus Button */
+.add-project-btn {
+  width: 60px;
+  height: 60px;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #28a745;
+  color: white;
+  font-size: 30px;
+  border: none;
+  padding: 15px;
+  border-radius: 50%;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.add-project-btn:hover {
+  background-color: #218838;
+}
+
+/* Cart empty message */
+.projects-list p {
+  font-size: 1rem;
+  color: #888;
+  text-align: center;
+  width: 100%;
+}
+

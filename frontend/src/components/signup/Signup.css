@@ -1,6 +1,6 @@
 .signup-container {
-    max-width: 400px;
-    margin: 0 auto;
+    width: 500px;
+    margin: 50px auto;
     padding: 20px;
     background-color: #f9f9f9;
     border-radius: 8px;
@@ -18,20 +18,23 @@ h2 {
 label {
     display: block;
     margin-bottom: 5px;
+    padding-left: 10px;  /* Added padding to labels */
+    font-weight: bold;   /* Optional, to make the labels stand out */
 }
 
 input {
-    width: 100%;
-    padding: 8px;
+    width: 90%;
+    padding: 12px;        /* Increased padding for inputs */
     margin-bottom: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
+    box-sizing: border-box; /* Ensure padding is included in width calculation */
 }
 
 button.signup-button {
     width: 100%;
     padding: 10px;
-    background-color: #4CAF50;
+    background-color: #007bff;
     color: white;
     border: none;
     border-radius: 4px;
@@ -39,11 +42,34 @@ button.signup-button {
 }
 
 button.signup-button:hover {
-    background-color: #45a049;
+    background-color: #0056b3;
+}
+
+.error-box {
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+.success-box {
+    color: green;
+    background-color: #e9ffe9;
+    border: 1px solid #b2ffb2;
+    padding: 10px;
+    margin-top: 20px;
+    text-align: center;
 }
 
 .error {
     color: red;
     text-align: center;
     margin-bottom: 10px;
+}
+
+.login-link {
+    text-decoration: underline;
+    color: #007bff;
+    cursor: pointer;
+    text-align: center;
+    font-weight: 600;
 }

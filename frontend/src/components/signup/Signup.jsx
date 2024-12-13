@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../../utils/axiosinstance'; // Replace with your actual axios instance
 import './Signup.css'; // You can define your styles here
+import ErrorModal from '../errormodal/ErrorModal'; // Import the modal component
 
 const SignUp = () => {
     const [fullName, setFullName] = useState("");
@@ -11,63 +12,65 @@ const SignUp = () => {
     const [userName, setUserName] = useState("");
     const [uniReg, setUniReg] = useState("");
     const [university, setUniversity] = useState("");
-    const [error, setError] = useState({
-        fullName: "",
-        email: "",
-        password: "",
-        confirmPassword: "",
-        userName: "",
-        uniReg: "",
-        university: ""
-    });
+    const [errorMessage, setErrorMessage] = useState(""); // State for error message
+    const [successMessage, setSuccessMessage] = useState(""); // State for success message
     const navigate = useNavigate();
 
     const handleSignUp = async (e) => {
         e.preventDefault();
 
-        // Reset error state
-        setError({
-            fullName: "",
-            email: "",
-            password: "",
-            confirmPassword: "",
-            userName: "",
-            uniReg: "",
-            university: ""
-        });
+        // Reset error and success messages on new submit
+        setErrorMessage("");
+        setSuccessMessage("");
 
         // Validation checks
         let isValid = true;
+
+        // Full name validation
         if (!fullName) {
-            setError((prevState) => ({ ...prevState, fullName: "Please enter your full name" }));
+            setErrorMessage("Please enter your full name");
             isValid = false;
         }
+
+        // Email validation
         if (!email || !validateEmail(email)) {
-            setError((prevState) => ({ ...prevState, email: "Please enter a valid email" }));
+            setErrorMessage("Please enter a valid email");
             isValid = false;
         }
+
+        // Username validation
         if (!userName) {
-            setError((prevState) => ({ ...prevState, userName: "Please enter your username" }));
+            setErrorMessage("Please enter your username");
             isValid = false;
         }
+
+        // University registration number validation
         if (!uniReg) {
-            setError((prevState) => ({ ...prevState, uniReg: "Please enter your university registration number" }));
+            setErrorMessage("Please enter your university registration number");
             isValid = false;
         }
+
+        // University name validation
         if (!university) {
-            setError((prevState) => ({ ...prevState, university: "Please enter your university name" }));
+            setErrorMessage("Please enter your university name");
             isValid = false;
         }
+
+        // Password validation
         if (!password) {
-            setError((prevState) => ({ ...prevState, password: "Please enter your password" }));
+            setErrorMessage("Please enter your password");
+            isValid = false;
+        } else if (!isPasswordValid(password)) {
+            setErrorMessage("Password must be at least 8 characters long, include at least one uppercase letter, one number, and one special character.");
             isValid = false;
         }
+
+        // Confirm password validation
         if (!confirmPassword) {
-            setError((prevState) => ({ ...prevState, confirmPassword: "Please confirm your password" }));
+            setErrorMessage("Please confirm your password");
             isValid = false;
-        }
-        if (password !== confirmPassword) {
-            setError((prevState) => ({ ...prevState, confirmPassword: "Passwords do not match" }));
+        } else if (password !== confirmPassword) {
+            setErrorMessage("Passwords do not match");
             isValid = false;
         }
 
@@ -89,27 +92,39 @@ const SignUp = () => {
             // Handle successful registration response
             if (response.data && response.data.accessToken) {
                 localStorage.setItem("token", response.data.accessToken);
-                navigate("/dashboard"); // Redirect to dashboard on successful signup
+                setSuccessMessage("Account created successfully!"); // Set success message
+                setTimeout(() => navigate("/home"), 2000); // Redirect after 2 seconds
             }
         } catch (err) {
             // Handle registration error
             if (err.response && err.response.data && err.response.data.message) {
-                setError((prevState) => ({ ...prevState, global: err.response.data.message }));
+                setErrorMessage(err.response.data.message); // Set the error message
             } else {
-                setError((prevState) => ({ ...prevState, global: "Something went wrong. Please try again later." }));
+                setErrorMessage("Something went wrong. Please try again later."); // Default error message
             }
         }
     };
 
+    // Email validation regex
     const validateEmail = (email) => {
         const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
         return emailRegex.test(email);
     };
 
+    // Password security validation
+    const isPasswordValid = (password) => {
+        const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+        return passwordRegex.test(password);
+    };
+
+    // Close error modal
+    const closeErrorModal = () => {
+        setErrorMessage(""); // Close the error modal by clearing the message
+    };
+
     return (
         <div className="signup-container">
             <h2>Sign Up</h2>
-            {error.global && <p className="error">{error.global}</p>}
             <form onSubmit={handleSignUp}>
                 <div className="form-group">
                     <label htmlFor="fullName">Full Name:</label>
@@ -119,7 +134,6 @@ const SignUp = () => {
                         value={fullName}
                         onChange={(e) => setFullName(e.target.value)}
                     />
-                    {error.fullName && <div className="error-box">{error.fullName}</div>}
                 </div>
 
                 <div className="form-group">
@@ -130,7 +144,6 @@ const SignUp = () => {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                     />
-                    {error.email && <div className="error-box">{error.email}</div>}
                 </div>
 
                 <div className="form-group">
@@ -141,7 +154,6 @@ const SignUp = () => {
                         value={userName}
                         onChange={(e) => setUserName(e.target.value)}
                     />
-                    {error.userName && <div className="error-box">{error.userName}</div>}
                 </div>
 
                 <div className="form-group">
@@ -152,7 +164,6 @@ const SignUp = () => {
                         value={uniReg}
                         onChange={(e) => setUniReg(e.target.value)}
                     />
-                    {error.uniReg && <div className="error-box">{error.uniReg}</div>}
                 </div>
 
                 <div className="form-group">
@@ -163,7 +174,6 @@ const SignUp = () => {
                         value={university}
                         onChange={(e) => setUniversity(e.target.value)}
                     />
-                    {error.university && <div className="error-box">{error.university}</div>}
                 </div>
 
                 <div className="form-group">
@@ -174,7 +184,6 @@ const SignUp = () => {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                     />
-                    {error.password && <div className="error-box">{error.password}</div>}
                 </div>
 
                 <div className="form-group">
@@ -185,11 +194,19 @@ const SignUp = () => {
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
                     />
-                    {error.confirmPassword && <div className="error-box">{error.confirmPassword}</div>}
                 </div>
 
                 <button type="submit" className="signup-button">Sign Up</button>
             </form>
+
+            {/* Success Message */}
+            {successMessage && <div className="success-box">{successMessage}</div>}
+
+            {/* Error Modal */}
+            {errorMessage && <ErrorModal message={errorMessage} onClose={closeErrorModal} />}
+
+            {/* Link to Login page */}
+            <p >Already have an account? &nbsp;&nbsp;&nbsp; <span onClick={() => navigate("/login")} className="login-link">Login</span></p>
         </div>
     );
 };
