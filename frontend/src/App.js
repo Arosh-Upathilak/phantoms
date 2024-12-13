@@ -1,12 +1,20 @@
-import logo from './logo.svg';
+import React from 'react';
 import './App.css';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-function App() {
+
+import Signup from './components/signup/Signup';
+
+const App = () => {
   return (
-    <div className="App">
-     
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Signup />} />
+
+      </Routes>
+    </Router>
   );
-}
+};
+
 
 export default App;
