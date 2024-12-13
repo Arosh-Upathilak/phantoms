@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
+const paymentRoutes = require('./stripe');
 
 const app = express();
 
@@ -32,6 +33,12 @@ app.use(cors({
 app.get('/', (req, res) => {
     res.json({ data: "Hello" });
 });
+
+//STRIPE routes
+app.use(cors());
+app.use(express.json()); // Parse JSON requests
+
+app.use('/api/payments', paymentRoutes);
 
 
 
